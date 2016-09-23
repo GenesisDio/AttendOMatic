@@ -6,4 +6,5 @@ client.json
 .settings
 bin/
 
-
+.idea
+*.iml
