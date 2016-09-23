@@ -1,8 +1,8 @@
 client.json
 
-.classpath
+# .classpath
 .gradle
-.project
+# .project
 .settings
 bin/
 
