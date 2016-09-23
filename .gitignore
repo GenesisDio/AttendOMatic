@@ -1,0 +1,9 @@
+client.json
+
+.classpath
+.gradle
+.project
+.settings
+bin/
+
+
