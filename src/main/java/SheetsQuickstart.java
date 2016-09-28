@@ -18,15 +18,15 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.*;
 import com.google.api.services.sheets.v4.Sheets;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class SheetsQuickstart {
+    
+    private static final String ENV_SHEET_ID = "SHEET_ID";
+    
     /** Application name. */
     private static final String APPLICATION_NAME =
         "Google Sheets API Java Quickstart";
@@ -71,7 +71,7 @@ public class SheetsQuickstart {
     public static Credential authorize() throws IOException {
         // Load client secrets.
         // Place client_secret.json file location here
-        InputStream in = new FileInputStream(".\\client.json");
+        InputStream in = new FileInputStream("." + File.separator + "client.json");
             // SheetsQuickstart.class.getResourceAsStream("/client_secret.json");
         GoogleClientSecrets clientSecrets =
             GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
@@ -90,7 +90,7 @@ public class SheetsQuickstart {
         return credential;
     }
 
-    /**
+    /***
      * Build and return an authorized Sheets API client service.
      * @return an authorized Sheets API client service
      * @throws IOException
@@ -108,7 +108,7 @@ public class SheetsQuickstart {
 
         // Prints the names and majors of students in a sample spreadsheet:
         // https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-        String spreadsheetId = "1YzWL27p88Mmsp1uc_nv9Ig0lD3VuSLB08vJbFeHJyQc";
+        String spreadsheetId = System.getenv(ENV_SHEET_ID);
  
         // Create requests object
         List<Request> requests = new ArrayList<>();

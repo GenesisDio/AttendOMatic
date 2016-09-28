@@ -1,10 +1,25 @@
 client.json
 
-# .classpath
+##
+# Gradle build locations
+##
+gradle/
+build/
+
+##
+# Eclipse Project Files
+##
+.classpath
 .gradle
-# .project
+.project
 .settings
 bin/
 
+##
+# IntelliJ Idea Files
+##
 .idea
 *.iml
+*.ipr
+*.iws
+out/

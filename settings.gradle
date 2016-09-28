@@ -16,4 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'CSC131 project'
+rootProject.name = 'AttendOMatic'
