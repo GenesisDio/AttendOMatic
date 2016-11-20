@@ -11,13 +11,14 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.*;
+import model.Receipt;
 import spark.Request;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * Created by merrillm on 10/2/16.
@@ -109,7 +110,7 @@ public class AttendanceLogger {
                 .build();
     }
     
-    public void log(Request request) throws IOException {
+    public Receipt log(Request request) throws IOException {
         // Build a new authorized API client service.
         Sheets service = getSheetsService();
         
@@ -117,13 +118,16 @@ public class AttendanceLogger {
         // https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
         String spreadsheetId = System.getenv(ENV_SHEET_ID);
         
-        int updateRow = rowFor(request.body().split("=")[1],
+        Map<String, String> requestForm = InterpretBody.asForm(request.body());
+        String studentId = requestForm.get("studentid");
+        
+        int updateRow = rowFor(studentId,
                 spreadsheetId,
                 service.spreadsheets());
-        System.out.println(updateRow);
+//        System.out.println(updateRow);
         
         if (updateRow < 0) {
-            throw new IllegalArgumentException("Unknown StudentID:" + request.body());
+            throw new IllegalArgumentException("Unknown StudentID:" + studentId);
         }
         
         // Create requests object
@@ -135,7 +139,7 @@ public class AttendanceLogger {
         // Add string 6/21/2016 value
         values.add(new CellData()
                 .setUserEnteredValue(new ExtendedValue()
-                        .setStringValue(("9/12/2016"))));
+                        .setStringValue(("10/6/2016"))));
         
         // Prepare request with proper row and column and its value
         requests.add(new com.google.api.services.sheets.v4.model.Request()
@@ -173,7 +177,11 @@ public class AttendanceLogger {
                 .setRequests(requests);
         service.spreadsheets().batchUpdate(spreadsheetId, batchUpdateRequestNew)
                 .execute();
+    
+        Receipt receipt = new Receipt(studentId);
+        receipt.save();
         
+        return receipt;
     }
     
     public int rowFor(String studentId, String spreadsheetId, Sheets.Spreadsheets spreadsheets) throws IOException {
@@ -186,7 +194,7 @@ public class AttendanceLogger {
             return -1;
         } else {
             for (int i = 0; i < values.size(); i++) {
-                System.out.printf("%s\n", values.get(i).get(0));
+                //System.out.printf("%s\n", values.get(i).get(0));
                 if (values.get(i).get(0).equals(studentId))
                     return i;
             }

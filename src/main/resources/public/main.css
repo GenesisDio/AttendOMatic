@@ -1,0 +1,156 @@
+
+
+* {
+	font-family: "Vulf Mono_Regular Italic",  "monospace", "SansSerif", "sans-serif";
+}
+
+body {
+	background-color: #ffffff;
+}
+
+code {
+	background-color: #cdcdcd;
+	border: 2px solid #aaaaaa;
+	border-radius: 4px;
+
+	padding: 5px;
+
+	width: 100%;
+}
+
+p {
+
+}
+
+.green {
+	color: #085f08;
+}
+.red {
+	color: #5f0808;
+}
+
+.anim {
+	display: block;
+	padding: 30px 20px;
+	margin: 30px auto;
+
+	position: relative;
+
+	transition-property: background, box-shadow, border-radius;
+	transition-duration: .22s;
+	transition-timing-function: ease;
+}
+
+.anim:hover {
+	box-shadow: 12px 6px 25px #aaaaaa;
+	background-color: #ffffff;
+}
+
+#contentcolumn {
+	width: 100%;
+	min-width: 600px;
+	max-width: 800px;
+
+	margin: 0 auto;
+
+	transition-property: margin-left, margin-right;
+	transition-duration: .22s;
+	transition-delay: 1s;
+}
+
+.inputwrapper {
+	display: inline-block;
+}
+
+#modeswapspan {
+	margin: 0;
+	padding: 0;
+
+	display: block;
+
+	width: 100%;
+	height: 40px;
+}
+
+button, .button {
+	user-select: none;
+
+	color: #000000;
+	font-style: normal;
+	font-variant: normal;
+	text-underline: none;
+	text-align: center;
+	line-height: 40px;
+
+	border: none;
+	outline: none;
+
+	background-color: #eeeeee;
+
+	transition-property: height, width, background-color, background, box-shadow, border-radius;
+	transition-duration: .22s;
+	transition-timing-function: ease;
+}
+
+button:hover, .button:hover {
+	background-color: #f6f6f6;
+	z-index: 2;
+	box-shadow: 6px 3px 12px #aaaaaa;
+}
+
+button:active, .button:active {
+	background-color: #dedede;
+	z-index: 2;
+	box-shadow: 2px 1px 6px #aaaaaa;
+}
+
+a.button {
+	display: inline-block;
+	padding: 2px 5px;
+}
+
+.split {
+	position: relative;
+	width: 100%;
+}
+
+.splitleft {
+	margin: 0;
+	width: 50%;
+	height: 40px;
+
+	margin-left: -25%;
+
+	position: absolute;
+	top: 0;
+	left: 25%;
+}
+.splitright {
+	margin: 0;
+	width: 50%;
+	height: 40px;
+
+	margin-right: -25%;
+
+	position: absolute;
+	top: 0;
+	right: 25%;
+}
+
+#titletext {
+	text-align: center;
+	width: 100%;
+	padding: 0;
+}
+
+@font-face {
+	font-family: 'Vulf Mono_Regular Italic';
+	src:    url('Vulf_Mono-Regular_Italic_web.eot');
+	src:    url('Vulf_Mono-Regular_Italic_web.eot?#iefix') format('embedded-opentype'),
+	url('Vulf_Mono-Regular_Italic_web.woff') format('woff'),
+	url('Vulf_Mono-Regular_Italic_web.woff2') format('woff2'),
+	url('Vulf_Mono-Regular_Italic_web.ttf') format('truetype'),
+	url('Vulf_Mono-Regular_Italic_web.svg#svgFontName') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}

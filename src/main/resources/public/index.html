@@ -3,17 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>Hello World!</title>
-  <link href="stylesheets/main.css" rel="stylesheet">
+  <link href="main.css" rel="stylesheet">
+  <link href="font/vulf.woff">
+
+  <base href="./" />
 </head>
-<body>
-<h1 style="font-family:Comic Sans Ms,sans-serif;text-align:center;font-size:20pt;color:#00FF00;">
-  AttendOMatic
-</h1>
-  <form action="/api/attending" method="post">
-    <label for="studentid">Student ID:</label>
-    <input id="studentid" name="studentid" type="text">
-    <button type="submit">Submit</button>
-    <button type="reset">Reset</button>
-  </form>
+<body ng-app="attendApp">
+
+<div id="contentcolumn">
+  <pre id="titletext" class="anim">-----------------------------------------
+--- AttendOMatic ------------------------
+-----------------------------------------
+------------------ CSC 131 Group 1 ------
+------------------------- Team "Team" ---
+-----------------------------------------</pre>
+  <br>
+  
+  <span id="modeswapspan" class="split">
+    <a class="button splitleft" ng-href="/#/student">I am a student</a>
+    <a class="button splitright" ng-href="/#/teacher">I am a teacher</a>
+  </span>
+
+  <div ng-view></div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
+
+<script src="app.js"></script>
+
 </body>
 </html>

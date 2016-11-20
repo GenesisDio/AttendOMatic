@@ -1,9 +1,9 @@
+import model.Receipt;
 import spark.Spark;
 
 import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
 import static spark.Spark.get;
 import static spark.Spark.post;
-import static spark.Spark.staticFileLocation;
 
 public class AttendAPI {
     
@@ -23,16 +23,26 @@ public class AttendAPI {
         
         post("/api/attending", (req,res) -> {
             if (!validator.isValid(req)) {
-                res.status(BAD_REQUEST_400);
-                return "";
+                res.redirect("/#/failure");
+                return "Bad Request! :(";
             }
             
             try {
-                attendanceLogger.log(req);
+                Receipt receipt = attendanceLogger.log(req);
+                res.redirect("/#/success?confnum=" + receipt.id);
+                return "Logged!";
+            } catch (Exception e) {
+                res.redirect("/#/failure");
+                return "Bad Request! :(";
+            }
+        });
+        get("trace", (req, res)->{
+            try {
+                return req.ip();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return "";
+            return ":/";
         });
     }
     
