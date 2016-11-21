@@ -15,10 +15,9 @@ import model.Receipt;
 import spark.Request;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by merrillm on 10/2/16.
@@ -110,6 +109,8 @@ public class AttendanceLogger {
                 .build();
     }
     
+    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    
     public Receipt log(Request request) throws IOException {
         // Build a new authorized API client service.
         Sheets service = getSheetsService();
@@ -120,10 +121,17 @@ public class AttendanceLogger {
         
         Map<String, String> requestForm = InterpretBody.asForm(request.body());
         String studentId = requestForm.get("studentid");
+    
+        String date = dateFormat.format(new Date());
         
         int updateRow = rowFor(studentId,
                 spreadsheetId,
                 service.spreadsheets());
+        
+        int updateCol = colFor(date,
+                spreadsheetId,
+                service.spreadsheets());
+        
 //        System.out.println(updateRow);
         
         if (updateRow < 0) {
@@ -135,11 +143,12 @@ public class AttendanceLogger {
         
         // Create values object
         List<CellData> values = new ArrayList<>();
+  
         
         // Add string 6/21/2016 value
         values.add(new CellData()
                 .setUserEnteredValue(new ExtendedValue()
-                        .setStringValue(("10/6/2016"))));
+                        .setStringValue((date))));
         
         // Prepare request with proper row and column and its value
         requests.add(new com.google.api.services.sheets.v4.model.Request()
@@ -147,7 +156,7 @@ public class AttendanceLogger {
                         .setStart(new GridCoordinate()
                                 .setSheetId(0)
                                 .setRowIndex(0)     // set the row to row 0
-                                .setColumnIndex(6)) // set the new column 6 to value 9/12/2016 at row 0
+                                .setColumnIndex(updateCol)) // set the new column 6 to value 9/12/2016 at row 0
                         .setRows(Arrays.asList(
                                 new RowData().setValues(values)))
                         .setFields("userEnteredValue,userEnteredFormat.backgroundColor")));
@@ -169,7 +178,7 @@ public class AttendanceLogger {
                         .setStart(new GridCoordinate()
                                 .setSheetId(0)
                                 .setRowIndex(updateRow)     // set the row to row 1
-                                .setColumnIndex(6)) // set the new column 6 to value "Y" at row 1
+                                .setColumnIndex(updateCol)) // set the new column 6 to value "Y" at row 1
                         .setRows(Arrays.asList(
                                 new RowData().setValues(valuesNew)))
                         .setFields("userEnteredValue,userEnteredFormat.backgroundColor")));
@@ -182,6 +191,23 @@ public class AttendanceLogger {
         receipt.save();
         
         return receipt;
+    }
+    
+    public int colFor(String date, String spreadsheetId, Sheets.Spreadsheets spreadsheets) throws IOException {
+        String range = "1:1";
+        ValueRange response = spreadsheets.values()
+                .get(spreadsheetId, range)
+                .execute();
+        List<List<Object>> values = response.getValues();
+        if (values == null || values.size() == 0) {
+            return -1;
+        } else {
+            int ret = values.get(0).size() - 1;
+            if (ret > 0 && values.get(0).get(ret).equals(date))
+                return ret;
+            else
+                return ret+1;
+        }
     }
     
     public int rowFor(String studentId, String spreadsheetId, Sheets.Spreadsheets spreadsheets) throws IOException {
