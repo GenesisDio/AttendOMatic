@@ -143,13 +143,21 @@ public class AttendanceLogger {
         
         // Create values object
         List<CellData> values = new ArrayList<>();
-  
         
         // Add string 6/21/2016 value
         values.add(new CellData()
                 .setUserEnteredValue(new ExtendedValue()
                         .setStringValue((date))));
         
+        if (updateCol < 0) {
+            updateCol *= -1;
+            requests.add(new com.google.api.services.sheets.v4.model.Request()
+                    .setAppendDimension(new AppendDimensionRequest()
+                            .setDimension("COLUMNS")
+                            .setSheetId(0)
+                            .setLength(1)));
+        }
+            
         // Prepare request with proper row and column and its value
         requests.add(new com.google.api.services.sheets.v4.model.Request()
                 .setUpdateCells(new UpdateCellsRequest()
@@ -206,7 +214,7 @@ public class AttendanceLogger {
             if (ret > 0 && values.get(0).get(ret).equals(date))
                 return ret;
             else
-                return ret+1;
+                return -(ret+1);
         }
     }
     
