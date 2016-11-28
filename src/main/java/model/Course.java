@@ -19,6 +19,8 @@ public class Course extends Model {
     public String referenceId;
     public String keycode;
     
+    // public Date keycodeExpireTime;
+    
     @ManyToOne
     public Teacher teacher;
     public String sheetId;

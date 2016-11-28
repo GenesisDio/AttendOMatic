@@ -16,6 +16,16 @@ angular.module('attendApp', [
     templateUrl: 'templates/teacherTemplate.html'
   });
 
+  $routeProvider.when('/teacher/dashboard', {
+    controller: 'dashboardController',
+    templateUrl: 'templates/teacherDashboardTemplate.html'
+  });
+
+  $routeProvider.when('/teacher/addCourse', {
+    controller: 'addCourseController',
+    templateUrl: 'templates/addCourseTemplate.html'
+  });
+
   $routeProvider.when('/success', {
     controller: 'successController',
     templateUrl: 'templates/successTemplate.html'
@@ -47,5 +57,36 @@ angular.module('attendApp', [
 })
 
 .controller('failureController', function($scope) {
+
+})
+
+.controller('dashboardController', function($scope) {
+  $scope.courses = {
+    "3": {name: "CSc 131", section: "1", id: "3", keycode: "aaaa"},
+    "1": {name: "Foo Bar", section: "1", id: "1", keycode: "bbbb"},
+    "2": {name: "CSc 131", section: "2", id: "2", keycode: "cccc"}
+  };
+})
+
+.controller('editCourseController', function($scope, $http) {
+
+  $scope.courses[$scope.selectedId].keycode = $scope.courses[$scope.selectedId].keycode ||
+    ("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4);
+
+  $scope.submit = function() {
+    $http({
+      method: 'POST',
+      url: '/editCourse'
+    }).then(function successCallback(response) {
+      // this callback will be called asynchronously
+      // when the response is available
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }
+})
+
+.controller('addCourseController', function($scope) {
 
 });

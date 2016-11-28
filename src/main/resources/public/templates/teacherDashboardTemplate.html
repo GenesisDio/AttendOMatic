@@ -1,19 +1,17 @@
-<div class="course">
-<label>Courses</label>
+<div class="anim">
+  <label>Courses</label>
 
-<select id="courseTree" ng-options = "course.section as course.id group by course.name for course in courses" >
-  
-</select>
+  <select id="courseTree"
+        ng-model="selectedCourse"
+        ng-options="course.id as 'Section '+course.section group by course.name for course in courses" >
 
-<body>
-<p id="key">
+  </select>
 
-</p>
+  <form ng-submit="submitCourseEdit()" ng-controller="editCourseController">
+    <input type="text" ng-model="courses[selectedCourse].keycode" required/>
+  </form>
 
-
-</body>
-
-<ul>
-  <li><a ng-href="/#/teacher/addCourse">Add a Course</a></li>
-</ul>
+  <ul>
+    <li><a ng-href="/#/teacher/addCourse">Add a Course</a></li>
+  </ul>
 </div>
