@@ -102,11 +102,16 @@ angular.module('attendApp', [
 })
 
 .controller('dashboardController', function($scope, ngDialog) {
-  $scope.courses = {
-    "3": {name: "CSc 131", section: "1", id: "3", keycode: "aaaa"},
-    "1": {name: "Foo Bar", section: "1", id: "1", keycode: "bbbb"},
-    "2": {name: "CSc 131", section: "2", id: "2", keycode: "cccc"}
-  };
+
+  $http({
+    method: 'GET',
+    url: '/api/courses',
+  }).then(function successCallback(response) {
+    console.log("Got courses:", response);
+    $scope.courses = response;
+  }, function errorCallback(response) {
+    console.log(response);
+  });
 
   $scope.openAddCourseDialog = function () {
       ngDialog.open({
