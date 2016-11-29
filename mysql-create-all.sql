@@ -8,7 +8,7 @@ create table courses (
   keycode_open_time             datetime(6),
   keycode_expire_time           datetime(6),
   teacher_id                    bigint,
-  sheet_id                      varchar(255),
+  sheet_url                     varchar(255),
   constraint uq_courses_reference_id unique (reference_id),
   constraint pk_courses primary key (id)
 );

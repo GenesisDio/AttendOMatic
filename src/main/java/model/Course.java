@@ -31,7 +31,16 @@ public class Course extends Model {
     
     @ManyToOne
     public Teacher teacher;
-    public String sheetId;
+    public String sheetUrl;
+    
+    public String getSheetId() {
+        try {
+            String ret = sheetUrl.substring(sheetUrl.indexOf("/d/")+3);
+            return ret.substring(0, ret.indexOf('/'));
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
     
     public void openAttendance() {
         if (nextKeycode == null)

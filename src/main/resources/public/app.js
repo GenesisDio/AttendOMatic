@@ -8,32 +8,38 @@ angular.module('attendApp', [
 .config(function($routeProvider, GoogleSigninProvider) {
   $routeProvider.when('/student', {
     controller: 'studentController',
-    templateUrl: 'templates/studentTemplate.html'
+    templateUrl: 'templates/studentTemplate.html',
+    reloadOnSearch: false
   });
 
   $routeProvider.when('/teacher', {
     controller: 'teacherController',
-    templateUrl: 'templates/teacherTemplate.html'
+    templateUrl: 'templates/teacherTemplate.html',
+    reloadOnSearch: false
   });
 
   $routeProvider.when('/teacher/dashboard', {
     controller: 'dashboardController',
-    templateUrl: 'templates/teacherDashboardTemplate.html'
+    templateUrl: 'templates/teacherDashboardTemplate.html',
+    reloadOnSearch: false
   });
 
   $routeProvider.when('/teacher/addCourse', {
     controller: 'addCourseController',
-    templateUrl: 'templates/addCourseTemplate.html'
+    templateUrl: 'templates/addCourseTemplate.html',
+    reloadOnSearch: false
   });
 
   $routeProvider.when('/success', {
     controller: 'successController',
-    templateUrl: 'templates/successTemplate.html'
+    templateUrl: 'templates/successTemplate.html',
+    reloadOnSearch: false
   });
 
   $routeProvider.when('/failure', {
     controller: 'failureController',
-    templateUrl: 'templates/failureTemplate.html'
+    templateUrl: 'templates/failureTemplate.html',
+    reloadOnSearch: false
   });
 
   $routeProvider.otherwise({
@@ -101,7 +107,7 @@ angular.module('attendApp', [
 
 })
 
-.controller('dashboardController', function($scope, $http, ngDialog, $location) {
+.controller('dashboardController', function($scope, $http, ngDialog, $location, $window) {
 
   $http({
     method: 'GET',
@@ -152,6 +158,11 @@ angular.module('attendApp', [
       scope: $scope
     });
   };
+
+  $scope.openSheetTab = function() {
+    $window.open($scope.courses[$scope.selectedCourse].sheetUrl);
+  }
+
 })
 .controller('manualEntryController', function($scope, $route, $http) {
   $scope.submitManualEntry = function() {

@@ -118,6 +118,11 @@ button:active, .button:active {
  	box-shadow: 2px 1px 6px #aaaaaa;
 }
 
+button:disabled, .button:disabled {
+	background-color: #888;
+	z-index: -1;
+}
+
 a.button {
 	display: inline-block;
 	padding: 2px 5px;

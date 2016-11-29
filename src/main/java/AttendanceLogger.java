@@ -11,12 +11,14 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.*;
+import model.Course;
 import model.Receipt;
 import spark.Request;
 
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -112,18 +114,46 @@ public class AttendanceLogger {
     public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     public Receipt log(Request request) throws IOException {
-        // Build a new authorized API client service.
-        Sheets service = getSheetsService();
-        
-        // Prints the names and majors of students in a sample spreadsheet:
-        // https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-        String spreadsheetId = System.getenv(ENV_SHEET_ID);
-        
         Map<String, String> requestForm = InterpretBody.asForm(request.body());
         String studentId = requestForm.get("studentid");
-    
+        Long courseId = Long.parseLong(requestForm.get("courseId"));
+        Course course = Course.find.byId(courseId);
         String date = dateFormat.format(new Date());
+        return log(studentId, course, date);
+    }
+    public Receipt log(String studentId, Course course, String date) throws IOException {
+    
+        // today
+        Calendar caldate = new GregorianCalendar();
+        // reset hour, minutes, seconds and millis
+        caldate.set(Calendar.HOUR_OF_DAY, 0);
+        caldate.set(Calendar.MINUTE, 0);
+        caldate.set(Calendar.SECOND, 0);
+        caldate.set(Calendar.MILLISECOND, 0);
+        Instant dayStart = caldate.toInstant();
         
+        // next day
+        caldate.add(Calendar.DAY_OF_MONTH, 1);
+        Instant dayEnd = caldate.toInstant();
+        
+        System.out.println(dayStart +" " + dayEnd);
+        
+        List<Receipt> receipts = Receipt.find
+                .where()
+                    .eq("student_id", studentId)
+                    .between("time_submitted", dayStart, dayEnd)
+                .findList();
+        
+        if (!receipts.isEmpty())
+            return receipts.get(0);
+        
+        System.out.println(receipts);
+        
+        // Build a new authorized API client service.
+        Sheets service = getSheetsService();
+        String spreadsheetId = course.getSheetId();
+    
+    
         int updateRow = rowFor(studentId,
                 spreadsheetId,
                 service.spreadsheets());
@@ -131,8 +161,6 @@ public class AttendanceLogger {
         int updateCol = colFor(date,
                 spreadsheetId,
                 service.spreadsheets());
-        
-//        System.out.println(updateRow);
         
         if (updateRow < 0) {
             throw new IllegalArgumentException("Unknown StudentID:" + studentId);
@@ -144,7 +172,7 @@ public class AttendanceLogger {
         // Create values object
         List<CellData> values = new ArrayList<>();
         
-        // Add string 6/21/2016 value
+        // Add string date value
         values.add(new CellData()
                 .setUserEnteredValue(new ExtendedValue()
                         .setStringValue((date))));
@@ -165,7 +193,7 @@ public class AttendanceLogger {
                                 .setSheetId(0)
                                 .setRowIndex(0)     // set the row to row 0
                                 .setColumnIndex(updateCol)) // set the new column 6 to value 9/12/2016 at row 0
-                        .setRows(Arrays.asList(
+                        .setRows(Collections.singletonList(
                                 new RowData().setValues(values)))
                         .setFields("userEnteredValue,userEnteredFormat.backgroundColor")));
         
@@ -187,7 +215,7 @@ public class AttendanceLogger {
                                 .setSheetId(0)
                                 .setRowIndex(updateRow)     // set the row to row 1
                                 .setColumnIndex(updateCol)) // set the new column 6 to value "Y" at row 1
-                        .setRows(Arrays.asList(
+                        .setRows(Collections.singletonList(
                                 new RowData().setValues(valuesNew)))
                         .setFields("userEnteredValue,userEnteredFormat.backgroundColor")));
         BatchUpdateSpreadsheetRequest batchUpdateRequestNew = new BatchUpdateSpreadsheetRequest()
@@ -201,7 +229,7 @@ public class AttendanceLogger {
         return receipt;
     }
     
-    public int colFor(String date, String spreadsheetId, Sheets.Spreadsheets spreadsheets) throws IOException {
+    private static int colFor(String date, String spreadsheetId, Sheets.Spreadsheets spreadsheets) throws IOException {
         String range = "1:1";
         ValueRange response = spreadsheets.values()
                 .get(spreadsheetId, range)
@@ -218,7 +246,7 @@ public class AttendanceLogger {
         }
     }
     
-    public int rowFor(String studentId, String spreadsheetId, Sheets.Spreadsheets spreadsheets) throws IOException {
+    private static int rowFor(String studentId, String spreadsheetId, Sheets.Spreadsheets spreadsheets) throws IOException {
         String range = "D:D";
         ValueRange response = spreadsheets.values()
                 .get(spreadsheetId, range)
