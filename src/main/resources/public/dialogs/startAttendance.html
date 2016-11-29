@@ -1,0 +1,12 @@
+<h1>Save Key/Open Attendance</h1>
+<form ng-submit="submitOpenAttendance()" method="post" class="course">
+  <div style="margin-bottom: 10px">
+    <span class="inputwrapper">
+      <label for="course">Key:</label><br>
+      <input id="course" name="course" type="text" ng-model="courseToPut.keycode" required>
+    </span>
+  </div>
+  <button ng-click="submitSaveKeycode()">Save</button>
+  <button type="submit">Open Attendance</button>
+  <button type="reset">Reset</button>
+</form>

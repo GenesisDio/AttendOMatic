@@ -1,0 +1,15 @@
+<h1>Edit Course</h1>
+<form ng-submit="submitCourseEdit()" class="course">
+  <div style="margin-bottom: 10px">
+    <span class="inputwrapper">
+      <label for="course">Course Name:</label><br>
+      <input id="course" name="course" type="text" ng-model="courseToEdit.name" required>
+    </span>
+    <span class="inputwrapper">
+      <label for="section">Section #</label><br>
+      <input id="section" name="section" type="number" style="width: 100px;" value="0" ng-model="courseToEdit.section" required>
+    </span>
+  </div>
+  <button type="submit">Submit</button>
+  <button type="reset">Reset</button>
+</form>
