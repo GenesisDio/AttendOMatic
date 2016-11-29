@@ -112,6 +112,12 @@ button:hover, .button:hover {
 	box-shadow: 6px 3px 12px #aaaaaa;
 }
 
+button:active, .button:active {
+	background-color: #dedede;
+ 	z-index: 2;
+ 	box-shadow: 2px 1px 6px #aaaaaa;
+}
+
 a.button {
 	display: inline-block;
 	padding: 2px 5px;
@@ -161,4 +167,8 @@ a.button {
 	url('Vulf_Mono-Regular_Italic_web.svg#svgFontName') format('svg');
 	font-weight: normal;
 	font-style: normal;
+}
+
+.ngdialog-content h1 {
+	line-height: 105%;
 }

@@ -2,10 +2,10 @@
  * Created by merrillm on 11/20/16.
  */
 angular.module('attendApp', [
-  'ngRoute', 'ngDialog'
+  'ngRoute', 'ngDialog', 'google-signin'
 ])
 
-.config(function($routeProvider) {
+.config(function($routeProvider, GoogleSigninProvider) {
   $routeProvider.when('/student', {
     controller: 'studentController',
     templateUrl: 'templates/studentTemplate.html'
@@ -39,6 +39,34 @@ angular.module('attendApp', [
   $routeProvider.otherwise({
     redirectTo: '/student'
   });
+
+  try {
+    GoogleSigninProvider.init({
+      client_id: '1075583454957-i9nuqbf9k1sputsch437t59eb7jg457n.apps.googleusercontent.com',
+    });
+  } catch (err) {
+    console.err(err);
+  }
+})
+
+.controller('loginController', function($scope, $location, GoogleSignin) {
+  $scope.googleSignIn = function () {
+    try {
+      GoogleSignin.signIn().then(function (user) {
+        try {
+          $location.path('/teacher/dashboard');
+          console.log(user);
+        } catch (err) {
+          console.log(err);
+        }
+      }, function (err) {
+        console.log(err);
+      });
+      ggggg = GoogleSignin;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 })
 
 .controller('studentController', function($scope, ngDialog) {
@@ -48,8 +76,7 @@ angular.module('attendApp', [
   $scope.clickToOpen();
 })
 
-.controller('teacherController', function($scope) {
-
+.controller('teacherController', function($scope, GoogleSignin) {
 })
 
 .controller('successController', function($scope, $location) {
@@ -80,10 +107,10 @@ angular.module('attendApp', [
   $scope.courses[$scope.selectedId].keycode = $scope.courses[$scope.selectedId].keycode ||
     ("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4);
 
-  $scope.submit = function() {
+  $scope.submitCourseEdit = function() {
     $http({
-      method: 'POST',
-      url: '/editCourse'
+      method: 'PUT',
+      url: '/api/course'
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available
@@ -99,3 +126,4 @@ angular.module('attendApp', [
 
   }
 });
+var ggggg;

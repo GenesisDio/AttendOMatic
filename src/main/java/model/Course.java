@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "courses")
+@UniqueConstraint(columnNames = {"reference_id"})
 public class Course extends Model {
     
     public static Model.Finder find = new Model.Finder<Long, Course>(Course.class);

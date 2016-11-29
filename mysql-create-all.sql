@@ -6,6 +6,7 @@ create table courses (
   keycode                       varchar(255),
   teacher_id                    bigint,
   sheet_id                      varchar(255),
+  constraint uq_courses_reference_id unique (reference_id),
   constraint pk_courses primary key (id)
 );
 

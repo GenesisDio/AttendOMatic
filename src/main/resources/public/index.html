@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="google-signin-client_id" content="1075583454957-i9nuqbf9k1sputsch437t59eb7jg457n.apps.googleusercontent.com">
+
   <meta charset="UTF-8">
   <title>Hello World!</title>
   <link href="main.css" rel="stylesheet">
   <link href="font/vulf.woff">
 
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.4/css/ngDialog-theme-default.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.4/css/ngDialog.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.4/css/ngDialog-theme-default.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.4/css/ngDialog.min.css" rel="stylesheet">
+
+  <script src="//apis.google.com/js/platform.js" async defer></script>
 
   <base href="./" />
 </head>
 <body ng-app="attendApp">
 
-<div id="contentcolumn">
+<div id="contentcolumn" ng-controller="loginController">
+
   <pre id="titletext" class="anim">-----------------------------------------
 --- AttendOMatic ------------------------
 -----------------------------------------
@@ -24,7 +29,7 @@
   
   <span id="modeswapspan" class="split">
     <a class="button splitleft" ng-href="/#/student">I am a student</a>
-    <a class="button splitright" ng-href="/#/teacher">I am a teacher</a>
+    <a class="button splitright" ng-click="googleSignIn()">I am a teacher</a>
   </span>
 
   <div ng-view></div>
@@ -33,7 +38,8 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.6.4/js/ngDialog.min.js"></script>
-
+<!-- https://github.com/astiusa/ng-google-signin -->
+<script src="//rawgithub.com/astiusa/ng-google-signin/master/dist/ng-google-signin.min.js"></script>
 <script src="app.js"></script>
 
 </body>
