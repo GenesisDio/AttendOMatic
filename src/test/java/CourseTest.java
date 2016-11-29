@@ -24,8 +24,7 @@ public class CourseTest {
     @Test
     public void databaseTest() {
         Teacher teacher = new Teacher();
-        teacher.firstName = "Robert";
-        teacher.lastName = "Paulson";
+        teacher.name = "Robert Paulson";
         teacher.save();
     
         Course course = new Course();

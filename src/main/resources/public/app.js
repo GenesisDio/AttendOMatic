@@ -49,13 +49,24 @@ angular.module('attendApp', [
   }
 })
 
-.controller('loginController', function($scope, $location, GoogleSignin) {
+.controller('loginController', function($scope, $http, $location, GoogleSignin) {
   $scope.googleSignIn = function () {
     try {
       GoogleSignin.signIn().then(function (user) {
         try {
-          $location.path('/teacher/dashboard');
-          console.log(user);
+          var profile = GoogleSignin.getBasicProfile();
+          var id_token = user.getAuthResponse().id_token;
+          console.log(profile, id_token);
+          $http({
+            method: 'POST',
+            url: '/api/teacher/idtok',
+            data: { name: profile.name, email: profile.email, id_token: id_token }
+          }).then(function successCallback(response) {
+            $location.path('/teacher/dashboard');
+          }, function errorCallback (response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });
         } catch (err) {
           console.log(err);
         }
@@ -98,7 +109,11 @@ angular.module('attendApp', [
   };
 
   $scope.openAddCourseDialog = function () {
-      ngDialog.open({ template: 'dialogs/addCourseTemplate.html', className: 'ngdialog-theme-default' });
+      ngDialog.open({
+        template: 'dialogs/addCourseTemplate.html',
+        className: 'ngdialog-theme-default',
+        controller: 'addCourseController'
+      });
   };
 })
 
@@ -122,15 +137,14 @@ angular.module('attendApp', [
   }
 })
 
-.controller('addCourseController', function($scope) {
+.controller('addCourseController', function($scope, $http) {
   $scope.submitCourseAdd = function() {
     $http({
       method: 'POST',
       url: '/api/course',
-      data: $scope.courses[$scope.selectedId]
+      data: $scope.courseToAdd
     }).then(function successCallback(response) {
-      // this callback will be called asynchronously
-      // when the response is available
+      $scope.closeThisDialog();
     }, function errorCallback (response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.

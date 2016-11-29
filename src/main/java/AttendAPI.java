@@ -1,6 +1,8 @@
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.databind.JsonNode;
 import model.Course;
 import model.Receipt;
+import model.Teacher;
 import spark.Spark;
 
 import java.util.Map;
@@ -68,6 +70,43 @@ public class AttendAPI {
                 e.printStackTrace();
             }
             return ":/";
+        });
+        
+        post("/api/teacher/idtok", (req, res) -> {
+            try {
+                System.out.println(req.body());
+                JsonNode json = InterpretBody.jsonAsJson(req);
+                String idToken = json.get("id_token").textValue();
+                String email = json.get("email").textValue();
+                String name = json.get("name").textValue();
+                
+                Teacher teacher = (Teacher) Teacher.find.where().eq("email", email).findUnique();
+    
+                if (teacher == null) {
+                    teacher = new Teacher();
+                    teacher.idToken = idToken;
+                    teacher.email = email;
+                    teacher.name = name;
+                    teacher.save();
+                } else {
+                    teacher.name = name;
+                    teacher.email = email;
+                    teacher.idToken = idToken;
+                    teacher.save();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                res.status(400);
+                return "";
+            }
+            return "";
+        });
+        
+        post("/api/course", (req, res) -> {
+            Course course = InterpretBody.jsonAsClass(req, Course.class);
+            course.save();
+            
+            return "";
         });
     }
     

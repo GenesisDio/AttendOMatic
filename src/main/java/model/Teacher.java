@@ -3,10 +3,7 @@ package model;
 import com.avaje.ebean.Model;
 import com.google.api.client.util.Key;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -22,10 +19,11 @@ public class Teacher extends Model {
     @Id
     public Long id;
     
-    public String firstName;
-    public String lastName;
+    public String name;
+    public String email;
     
-    public String username;
+    @Column(columnDefinition = "TEXT")
+    public String idToken;
     
     public List<Course> courses() {
         return (List<Course>) Course.find.where().eq("teacher_id", id).findList();

@@ -3,11 +3,11 @@
   <div style="margin-bottom: 10px">
     <span class="inputwrapper">
       <label for="course">Course Name:</label><br>
-      <input id="course" name="course" type="text" required>
+      <input id="course" name="course" type="text" ng-model="courseToAdd.name" required>
     </span>
     <span class="inputwrapper">
       <label for="section">Section #</label><br>
-      <input id="section" name="section" type="number" style="width: 100px;" value="0" required>
+      <input id="section" name="section" type="number" style="width: 100px;" value="0" ng-model="courseToAdd.section" required>
     </span>
   </div>
   <button type="submit">Submit</button>

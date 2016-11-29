@@ -19,9 +19,9 @@ create table receipts (
 
 create table teachers (
   id                            bigint auto_increment not null,
-  first_name                    varchar(255),
-  last_name                     varchar(255),
-  username                      varchar(255),
+  name                          varchar(255),
+  email                         varchar(255),
+  id_token                      TEXT,
   constraint pk_teachers primary key (id)
 );
 
