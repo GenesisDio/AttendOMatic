@@ -115,6 +115,7 @@ angular.module('attendApp', [
         controller: 'addCourseController'
       });
   };
+  
   $scope.openEditCourseDialog = function () {
       ngDialog.open({
         template: 'dialogs/editCourseTemplate.html',
@@ -123,8 +124,30 @@ angular.module('attendApp', [
         scope: $scope
       });
   };
+    
+  $scope.openManualEntryDialog = function () {
+      ngDialog.open({
+        template: 'dialogs/manualEntryTemplate.html',
+        className: 'ngdialog-theme-default',
+        controller: 'manualEntryController'
+      });
+  };
 })
-
+.controller('manualEntryController', function($scope, $http) {
+  $scope.submitManualEntry = function() {
+    $http({
+      method: 'PUT',
+      url: '/api/course',
+      data: $scope.courses[$scope.selectedId]
+    }).then(function successCallback(response) {
+      // this callback will be called asynchronously
+      // when the response is available
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }
+})
 .controller('editCourseController', function($scope, $http) {
 
   $scope.submitCourseEdit = function() {
