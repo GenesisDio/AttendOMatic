@@ -4,8 +4,12 @@
     <span class="inputwrapper">
       <select id="courseTree"
             ng-model="selectedCourse"
-            ng-options="course.id as 'Section '+course.section group by course.name for course in courses" >
+            ng-options="course.id as course.name + ' - Section '+course.section group by course.name for course in courses" >
       </select>
+    </span>
+
+    <span class="inputwrapper" style="position: absolute;right:40px;top:0px;">
+      <a class="button" ng-click="openAddCourseDialog()">Add a Course</a>
     </span>
 
     <span class="inputwrapper" style="position: absolute;right:40px;top:0px;">

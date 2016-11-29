@@ -1,29 +1,26 @@
-import com.fasterxml.jackson.core.JsonFactory;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import spark.Response;
-import spark.Request;
+import com.google.api.client.googleapis.auth.oauth2.GooglePublicKeysManager;
+import com.google.api.client.json.JsonFactory;
 
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
 /**
  * Created by merrillm on 11/28/16.
  */
-public class GoogleLoginAPI {
-    
-    static final String CLIENT_ID = "1075583454957-i9nuqbf9k1sputsch437t59eb7jg457n.apps.googleusercontent.com";
-    
-    public static void route(){
-        
-    }
-    
-//    public static String loginToken(Request req, Response res) {
-//        JsonFactory jsonFactory = new JsonFactory();
+public class UserContext {
+//
+//    private static JsonFactory jsonFactory;
+//
+//    static {
+//        jsonFactory = new GsonFactory();
+//    }
+//
+//    public static boolean isValid(String id_token) {
+////        JsonFactory jsonFactory = new JsonFactory();
+//        GooglePublicKeysManager transport = new GooglePublicKeysManager(httpTransport, jsonFactory);
 //        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-//                .setAudience(Arrays.asList(CLIENT_ID))
+//                .setAudience(Arrays.asList(GoogleLoginAPI.CLIENT_ID))
 //                // If you retrieved the token on Android using the Play Services 8.3 API or newer, set
 //                // the issuer to "https://accounts.google.com". Otherwise, set the issuer to
 //                // "accounts.google.com". If you need to verify tokens from multiple sources, build
@@ -33,14 +30,7 @@ public class GoogleLoginAPI {
 //
 //// (Receive idTokenString by HTTPS POST)
 //
-//        GoogleIdToken idToken = null;
-//        try {
-//            idToken = verifier.verify(req.body());
-//        } catch (GeneralSecurityException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+//        GoogleIdToken idToken = verifier.verify(idTokenString);
 //        if (idToken != null) {
 //            GoogleIdToken.Payload payload = idToken.getPayload();
 //

@@ -101,14 +101,14 @@ angular.module('attendApp', [
 
 })
 
-.controller('dashboardController', function($scope, ngDialog) {
+.controller('dashboardController', function($scope, $http, ngDialog) {
 
   $http({
     method: 'GET',
     url: '/api/courses',
   }).then(function successCallback(response) {
     console.log("Got courses:", response);
-    $scope.courses = response;
+    $scope.courses = response.data;
   }, function errorCallback(response) {
     console.log(response);
   });
