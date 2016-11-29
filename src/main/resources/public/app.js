@@ -60,7 +60,7 @@ angular.module('attendApp', [
           $http({
             method: 'POST',
             url: '/api/teacher/idtok',
-            data: { name: profile.name, email: profile.email, id_token: id_token }
+            data: id_token
           }).then(function successCallback(response) {
             $location.path('/teacher/dashboard');
           }, function errorCallback (response) {
@@ -124,20 +124,26 @@ angular.module('attendApp', [
       ngDialog.open({
         template: 'dialogs/manualEntryTemplate.html',
         className: 'ngdialog-theme-default',
-        controller: 'manualEntryController'
+        controller: 'manualEntryController',
+        scope: $scope
       });
   };
 })
 .controller('manualEntryController', function($scope, $http) {
 
-  $scope.courses[$scope.selectedId].keycode = $scope.courses[$scope.selectedId].keycode ||
-    ("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4);
+  console.log($scope);
 
   $scope.submitManualEntry = function() {
+    console.log($scope);
+    console.log($scope.$parent.selectedCourse);
     $http({
-      method: 'PUT',
-      url: '/api/course',
-      data: $scope.courses[$scope.selectedId]
+      method: 'POST',
+      url: '/api/manual',
+      data: {
+        studentid: $scope.manualForm.studentid,
+        date: $scope.manualForm.date,
+        courseid: $scope.$parent.selectedCourse
+      }
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available

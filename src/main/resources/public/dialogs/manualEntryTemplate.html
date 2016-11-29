@@ -1,13 +1,13 @@
-<h1>Add Course</h1>
-<form ng-submit="submitCourseAdd()" method="post" class="course">
+<h1>Manual Entry</h1>
+<form ng-submit="submitManualEntry()" class="course">
   <div style="margin-bottom: 10px">
     <span class="inputwrapper">
-      <label for="course">Course Name:</label><br>
-      <input id="course" name="course" type="text" ng-model="courseToAdd.name" required>
+      <label for="studentid">Student ID:</label><br>
+      <input id="studentid" name="studentid" type="text" ng-model="manualForm.studentid" required>
     </span>
     <span class="inputwrapper">
-      <label for="section">Section #</label><br>
-      <input id="section" name="section" type="number" style="width: 100px;" value="0" ng-model="courseToAdd.section" required>
+      <label for="date">Key Code:</label><br>
+      <input id="date" name="date" type="date" ng-model="manualForm.date" required>
     </span>
   </div>
   <button type="submit">Submit</button>
