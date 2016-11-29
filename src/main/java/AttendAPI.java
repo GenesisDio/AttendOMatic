@@ -1,5 +1,7 @@
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import model.Course;
 import model.Receipt;
 import model.Teacher;
@@ -100,6 +102,14 @@ public class AttendAPI {
                 return "";
             }
             return "";
+        });
+        
+        get("/api/courses", (req, res) -> {
+        	
+        	Teacher teacher = (Teacher) Teacher.find.where().eq("email", "mattmerr47@gmail.com").findUnique();
+        	ObjectMapper mapper = new ObjectMapper();
+        	String jsonString = mapper.writeValueAsString(teacher.courses());
+        	return jsonString;
         });
         
         post("/api/course", (req, res) -> {
