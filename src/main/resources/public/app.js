@@ -80,10 +80,11 @@ angular.module('attendApp', [
   $scope.courses[$scope.selectedId].keycode = $scope.courses[$scope.selectedId].keycode ||
     ("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4);
 
-  $scope.submit = function() {
+  $scope.submitCourseEdit = function() {
     $http({
-      method: 'POST',
-      url: '/editCourse'
+      method: 'PUT',
+      url: '/editCourse',
+      data: $scope.courses[$scope.selectedId]
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available
@@ -96,6 +97,16 @@ angular.module('attendApp', [
 
 .controller('addCourseController', function($scope) {
   $scope.submitCourseAdd = function() {
-
+    $http({
+      method: 'POST',
+      url: '/addCourse',
+      data: $scope.courses[$scope.selectedId]
+    }).then(function successCallback(response) {
+      // this callback will be called asynchronously
+      // when the response is available
+    }, function errorCallback (response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
   }
 });
