@@ -1,4 +1,5 @@
-<form action="/api/addCourse" method="post" class="course">
+<h1>Add Course</h1>
+<form ng-submit="submitCourseAdd()" method="post" class="course">
   <div style="margin-bottom: 10px">
     <span class="inputwrapper">
       <label for="course">Course Name:</label><br>
@@ -6,7 +7,7 @@
     </span>
     <span class="inputwrapper">
       <label for="section">Section #</label><br>
-      <input id="section" name="section" type="text" required>
+      <input id="section" name="section" type="number" style="width: 100px;" value="0" required>
     </span>
   </div>
   <button type="submit">Submit</button>

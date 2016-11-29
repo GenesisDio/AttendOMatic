@@ -1,17 +1,19 @@
 <div class="anim">
-  <label>Courses</label>
+  <h4>Courses:</h4>
+  <div style="position:relative;width:100%;">
+    <span class="inputwrapper">
+      <select id="courseTree"
+            ng-model="selectedCourse"
+            ng-options="course.id as 'Section '+course.section group by course.name for course in courses" >
+      </select>
+    </span>
 
-  <select id="courseTree"
-        ng-model="selectedCourse"
-        ng-options="course.id as 'Section '+course.section group by course.name for course in courses" >
+    <span class="inputwrapper" style="position: absolute;right:40px;top:0px;">
+      <a class="button" ng-click="openAddCourseDialog()">Add a Course</a>
+    </span>
 
-  </select>
-
-  <form ng-submit="submitCourseEdit()" ng-controller="editCourseController">
-    <input type="text" ng-model="courses[selectedCourse].keycode" required/>
-  </form>
-
-  <ul>
-    <li><a ng-href="/#/teacher/addCourse">Add a Course</a></li>
-  </ul>
+    <form ng-show="courses[selectedCourse]" ng-submit="submitCourseEdit()" ng-controller="editCourseController">
+      <input type="text" ng-model="courses[selectedCourse].keycode" required/>
+    </form>
+  </div>
 </div>

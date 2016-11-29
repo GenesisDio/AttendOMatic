@@ -2,7 +2,7 @@
  * Created by merrillm on 11/20/16.
  */
 angular.module('attendApp', [
-  'ngRoute'
+  'ngRoute', 'ngDialog'
 ])
 
 .config(function($routeProvider) {
@@ -41,8 +41,11 @@ angular.module('attendApp', [
   });
 })
 
-.controller('studentController', function($scope) {
-
+.controller('studentController', function($scope, ngDialog) {
+  $scope.clickToOpen = function () {
+    ngDialog.open({ template: 'dialogs/testTemplate.html', className: 'ngdialog-theme-default' });
+  };
+  $scope.clickToOpen();
 })
 
 .controller('teacherController', function($scope) {
@@ -60,11 +63,15 @@ angular.module('attendApp', [
 
 })
 
-.controller('dashboardController', function($scope) {
+.controller('dashboardController', function($scope, ngDialog) {
   $scope.courses = {
     "3": {name: "CSc 131", section: "1", id: "3", keycode: "aaaa"},
     "1": {name: "Foo Bar", section: "1", id: "1", keycode: "bbbb"},
     "2": {name: "CSc 131", section: "2", id: "2", keycode: "cccc"}
+  };
+
+  $scope.openAddCourseDialog = function () {
+      ngDialog.open({ template: 'dialogs/addCourseTemplate.html', className: 'ngdialog-theme-default' });
   };
 })
 
@@ -88,5 +95,7 @@ angular.module('attendApp', [
 })
 
 .controller('addCourseController', function($scope) {
+  $scope.submitCourseAdd = function() {
 
+  }
 });

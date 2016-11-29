@@ -4,8 +4,10 @@
 	font-family: "Vulf Mono_Regular Italic",  "monospace", "SansSerif", "sans-serif";
 }
 
-body {
+html, body {
 	background-color: #ffffff;
+	margin: 0;
+	padding: 0;
 }
 
 code {
@@ -60,6 +62,10 @@ p {
 
 .inputwrapper {
 	display: inline-block;
+	vertical-align:top;
+	min-width: 150px;
+	min-height: 40px;
+	margin-right: 10px;
 }
 
 #modeswapspan {
@@ -72,12 +78,20 @@ p {
 	height: 40px;
 }
 
-button, .button {
+.ngdialog-content {
+	background-color: #ffffff !important;
+}
+
+button, .button, select, .select {
 	user-select: none;
+
+	min-height: 44px;
+	padding: 5px;
 
 	color: #000000;
 	font-style: normal;
 	font-variant: normal;
+	font-size: 16px;
 	text-underline: none;
 	text-align: center;
 	line-height: 40px;
@@ -96,12 +110,6 @@ button:hover, .button:hover {
 	background-color: #f6f6f6;
 	z-index: 2;
 	box-shadow: 6px 3px 12px #aaaaaa;
-}
-
-button:active, .button:active {
-	background-color: #dedede;
-	z-index: 2;
-	box-shadow: 2px 1px 6px #aaaaaa;
 }
 
 a.button {
