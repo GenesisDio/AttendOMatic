@@ -115,8 +115,33 @@ angular.module('attendApp', [
         controller: 'addCourseController'
       });
   };
+  $scope.openManualEntryDialog = function () {
+      ngDialog.open({
+        template: 'dialogs/manualEntryTemplate.html',
+        className: 'ngdialog-theme-default',
+        controller: 'manualEntryController'
+      });
+  };
 })
+.controller('manualEntryController', function($scope, $http) {
 
+  $scope.courses[$scope.selectedId].keycode = $scope.courses[$scope.selectedId].keycode ||
+    ("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4);
+
+  $scope.submitManualEntry = function() {
+    $http({
+      method: 'PUT',
+      url: '/api/course',
+      data: $scope.courses[$scope.selectedId]
+    }).then(function successCallback(response) {
+      // this callback will be called asynchronously
+      // when the response is available
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }
+})
 .controller('editCourseController', function($scope, $http) {
 
   $scope.courses[$scope.selectedId].keycode = $scope.courses[$scope.selectedId].keycode ||
