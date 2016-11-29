@@ -16,6 +16,6 @@ public class AttendRequestValidator {
     
     public boolean isValid(Request req) {
         // TODO: Add functionality here -merrillm
-        return !req.body().contains("banana");
+        return req.ip().startsWith("130.86");
     }
 }
