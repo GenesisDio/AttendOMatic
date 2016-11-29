@@ -25,9 +25,17 @@ public class AttendAPI {
     }
     
     public void deploy() {
+        
+        String port = "4567";
+        
+        Map<String, String> env = System.getenv();
+        if (env.containsKey("PORT"))
+            port = env.get("PORT");
+        
 //        staticFileLocation("/public");
         Spark.staticFileLocation("/public");
         Spark.staticFiles.expireTime(1);
+        Spark.port(Integer.parseInt(port));
         
         Filter loggedInFilter = (req, res) -> {
             if (req.session().attribute("email") == null || currentTeacher(req) == null)
