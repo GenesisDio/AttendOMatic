@@ -4,7 +4,7 @@
     <span class="inputwrapper">
       <select id="courseTree" style="width:500px"
             ng-model="selectedCourse" ng-change="update()"
-            ng-options="course.id as course.name+' - Section '+course.section group by course.name for course in courses" >
+            ng-options="course.id as course.name+' - Section '+course.section+': Course ID '+course.id group by course.name for course in courses" >
       </select>
     </span>
 
@@ -12,10 +12,13 @@
       <button class="button" ng-click="openAddCourseDialog()">Add a Course</button>
     </span>
 
-    <form ng-submit="submitCourseEdit()" style="position:absolute;left:0;top:80px;">
+    <form ng-submit="submitSheet()" style="position:absolute;left:0;top:80px;">
       <label for="sheetinput" style="line-height:80%;margin-bottom:0;display:block">Copy sheet url here:</label>
-      <input id="sheetinput" type="text" ng-model="courses[selectedCourse].sheetUrl" style="width:450px;" required/>
-      <button type="submit">Submit</button>
+      <input id="sheetinput" type="text" ng-model="courses[selectedCourse].sheetUrl" style="width:450px;"
+             ng-disabled="!selectedCourse || !courses[selectedCourse]" required/>
+      <button type="submit"
+              ng-disabled="!selectedCourse || !courses[selectedCourse] || !courses[selectedCourse].sheetUrl">
+        Submit</button>
     </form>
     <span class="inputwrapper" style="position: absolute;right:0px;top:80px;">
       <button ng-click="openSheetTab()"
@@ -29,9 +32,9 @@
         Edit Course</button>
     </span>
     
-    <span class="inputwrapper" style="position: absolute;left:324px;top:160px;">
-      <button class="button" ng-click="openKeyDialog()"
-              ng-disabled="!selectedCourse || !courses[selectedCourse]">Generate Key</button>
+    <span class="inputwrapper" style="position: absolute;left:190px;top:160px;">
+      <button class="button green" ng-click="openKeyDialog()"
+              ng-disabled="!selectedCourse || !courses[selectedCourse]">Generate Key / Open Attendance</button>
     </span>
 
     <span class="inputwrapper" style="position: absolute;left:0px;top:160px;">

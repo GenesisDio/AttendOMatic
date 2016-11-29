@@ -1,7 +1,6 @@
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.plus.samples.verifytoken.Checker;
 import model.Course;
@@ -14,7 +13,6 @@ import spark.Spark;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
 import static spark.Spark.*;
 
 public class AttendAPI {
@@ -169,6 +167,18 @@ public class AttendAPI {
         });
     
         before("/api/course", loggedInFilter);
+        put("/api/course", (req, res) -> {
+            try {
+                Course course = InterpretBody.jsonAsClass(req, Course.class);
+                course.teacher = currentTeacher(req);
+                course.update();
+                System.out.println(course.name);
+            } catch (Exception e) {
+                e.printStackTrace();
+                res.status(400);
+            }
+            return "";
+        });
         post("/api/course", (req, res) -> {
             Course course = InterpretBody.jsonAsClass(req, Course.class);
             course.teacher = currentTeacher(req);
@@ -179,10 +189,8 @@ public class AttendAPI {
     
         before("/api/manual", loggedInFilter);
         post("/api/manual", (req, res) -> {
-            // Validate request comes from a teacher
-            
-            
-            return "";
+            JsonNode form = InterpretBody.jsonAsJson(req);
+            return attendanceLogger.log(form.get("studentid").asText(), Course.find.byId(form.get("courseid").asLong()), form.get("date").asText().substring(0,10)).id;
         });
     
         before("/api/curlogin", loggedInFilter);

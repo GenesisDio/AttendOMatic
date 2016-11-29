@@ -168,12 +168,13 @@ angular.module('attendApp', [
   $scope.submitManualEntry = function() {
     console.log($scope);
     console.log($scope.$parent.selectedCourse);
+    console.log($scope.manualForm.date.toISOString());
     $http({
       method: 'POST',
       url: '/api/manual',
       data: {
         studentid: $scope.manualForm.studentid,
-        date: $scope.manualForm.date,
+        date: $scope.manualForm.date.toISOString().substr(0,10),
         courseid: $scope.$parent.selectedCourse
       }
     }).then(function successCallback(response) {
@@ -185,6 +186,12 @@ angular.module('attendApp', [
   }
 })
 .controller('editCourseController', function($scope, $route, $http) {
+
+  $scope.courseToEdit = {
+    id: $scope.$parent.courses[$scope.$parent.selectedCourse].id,
+    name: $scope.$parent.courses[$scope.$parent.selectedCourse].name,
+    section: $scope.$parent.courses[$scope.$parent.selectedCourse].section,
+  };
 
   $scope.submitCourseEdit = function() {
     $http({

@@ -125,6 +125,13 @@ public class AttendanceLogger {
     
         // today
         Calendar caldate = new GregorianCalendar();
+        
+        String[] split = date.split("-");
+        
+        caldate.set(Calendar.YEAR, Integer.parseInt(split[0]));
+        caldate.set(Calendar.MONTH, Integer.parseInt(split[1])-1);
+        caldate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(split[2]));
+        
         // reset hour, minutes, seconds and millis
         caldate.set(Calendar.HOUR_OF_DAY, 0);
         caldate.set(Calendar.MINUTE, 0);
@@ -136,7 +143,7 @@ public class AttendanceLogger {
         caldate.add(Calendar.DAY_OF_MONTH, 1);
         Instant dayEnd = caldate.toInstant();
         
-        System.out.println(dayStart +" " + dayEnd);
+        System.out.println(dayStart +" < " + date + " < " + dayEnd);
         
         List<Receipt> receipts = Receipt.find
                 .where()
