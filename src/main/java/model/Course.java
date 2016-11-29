@@ -9,6 +9,8 @@ import javax.persistence.*;
 @Table(name = "courses")
 public class Course extends Model {
     
+    public static Model.Finder find = new Model.Finder<Long, Course>(Course.class);
+    
     @Key
     @Id
     public Long id;

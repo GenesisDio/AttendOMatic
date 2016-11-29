@@ -16,6 +16,8 @@ import java.util.List;
 @Table(name = "teachers")
 public class Teacher extends Model {
     
+    public static Model.Finder find = new Model.Finder<Long, Teacher>(Teacher.class);
+    
     @Key
     @Id
     public Long id;
@@ -26,8 +28,7 @@ public class Teacher extends Model {
     public String username;
     
     public List<Course> courses() {
-        return new Model.Finder<Long, Course>(Course.class)
-                .where().eq("teacher_id", id).findList();
+        return (List<Course>) Course.find.where().eq("teacher_id", id).findList();
     }
     
 }
