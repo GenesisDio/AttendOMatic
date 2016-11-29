@@ -13,7 +13,7 @@ import java.util.Date;
 @UniqueConstraint(columnNames = {"reference_id"})
 public class Course extends Model {
     
-    public static Model.Finder find = new Model.Finder<Long, Course>(Course.class);
+    public static Model.Finder<Long, Course> find = new Model.Finder<Long, Course>(Course.class);
     
     @Key
     @Id

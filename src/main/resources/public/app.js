@@ -101,7 +101,7 @@ angular.module('attendApp', [
 
 })
 
-.controller('dashboardController', function($scope, $http, ngDialog) {
+.controller('dashboardController', function($scope, $http, ngDialog, $location) {
 
   $http({
     method: 'GET',
@@ -109,9 +109,14 @@ angular.module('attendApp', [
   }).then(function successCallback(response) {
     console.log("Got courses:", response);
     $scope.courses = response.data;
+    $scope.selectedCourse = (response.data[$location.search().selectedCourse] || {id:undefined}).id;
   }, function errorCallback(response) {
     console.log(response);
   });
+
+  $scope.update = function(){
+    $location.search("selectedCourse", $scope.selectedCourse);
+  };
 
   $scope.openAddCourseDialog = function () {
       ngDialog.open({
@@ -138,8 +143,17 @@ angular.module('attendApp', [
         scope: $scope
       });
   };
+
+  $scope.openKeyDialog = function () {
+    ngDialog.open({
+      template: 'dialogs/startAttendance.html',
+      className: 'ngdialog-theme-default',
+      controller: 'keyController',
+      scope: $scope
+    });
+  };
 })
-.controller('manualEntryController', function($scope, $http) {
+.controller('manualEntryController', function($scope, $route, $http) {
   $scope.submitManualEntry = function() {
     console.log($scope);
     console.log($scope.$parent.selectedCourse);
@@ -152,15 +166,14 @@ angular.module('attendApp', [
         courseid: $scope.$parent.selectedCourse
       }
     }).then(function successCallback(response) {
-      // this callback will be called asynchronously
-      // when the response is available
+      $route.reload()
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
     });
   }
 })
-.controller('editCourseController', function($scope, $http) {
+.controller('editCourseController', function($scope, $route, $http) {
 
   $scope.submitCourseEdit = function() {
     $http({
@@ -168,17 +181,14 @@ angular.module('attendApp', [
       url: '/api/course',
       data: $scope.courseToEdit
     }).then(function successCallback(response) {
-      // this callback will be called asynchronously
-      // when the response is available
       $scope.closeThisDialog();
+      $route.reload()
     }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
     });
   }
 })
 
-.controller('addCourseController', function($scope, $http) {
+.controller('addCourseController', function($scope, $route, $http) {
   $scope.submitCourseAdd = function() {
     $http({
       method: 'POST',
@@ -186,23 +196,25 @@ angular.module('attendApp', [
       data: $scope.courseToAdd
     }).then(function successCallback(response) {
       $scope.closeThisDialog();
+      $route.reload()
     }, function errorCallback (response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
     });
   }
 })
 
-.controller('keyController', function($scope, $http) {
+.controller('keyController', function($scope, $route, $http) {
   $scope.courseToPut = {
   	id: $scope.$parent.selectedCourse
   };
   
   $scope.keygen = function() {
-  	$scope.courseToPut.keycode = ("0000"+Math.floor(Math.random()*65536)).toString(16).slice(-4);
-  }
-  if ($scope.$parent.courses[$scope.$parent.selectedCourse].keyDirty)
+  	$scope.courseToPut.keycode = ("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4);
+  };
+
+  if ($scope.$parent.courses[$scope.$parent.selectedCourse].dirty)
   	$scope.keygen();
+  else
+    $scope.courseToPut.keycode = $scope.$parent.courses[$scope.$parent.selectedCourse].keycode;
   
   $scope.submitSaveKeycode = function() {
     $http({
@@ -211,6 +223,7 @@ angular.module('attendApp', [
       data: $scope.courseToPut
     }).then(function successCallback(response) {
       $scope.closeThisDialog();
+      $route.reload()
     }, function errorCallback (response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
@@ -224,6 +237,7 @@ angular.module('attendApp', [
       data: $scope.courseToPut
     }).then(function successCallback(response) {
       $scope.closeThisDialog();
+      $route.reload()
     }, function errorCallback (response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.

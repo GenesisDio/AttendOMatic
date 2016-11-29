@@ -11,6 +11,7 @@ import spark.Filter;
 import spark.Request;
 import spark.Spark;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
@@ -56,47 +57,55 @@ public class AttendAPI {
         
         before("/api/course/keycode", loggedInFilter);
         post("/api/course/keycode", (req,res) -> {
-            Map<String, String> form = InterpretBody.asForm(req.body());
-            String courseId = form.get("id");
-            String key = form.get("keycode");
-            
-            Course course = new Model.Finder<Long, Course>(Course.class)
-                    .byId(Long.valueOf(courseId));
-            
-            if (course == null) {
+            try {
+                JsonNode json = InterpretBody.jsonAsJson(req);
+                Long courseId = json.get("id").asLong();
+                String key = json.get("keycode").asText().toLowerCase();
+        
+                Course course = new Model.Finder<Long, Course>(Course.class)
+                        .byId(courseId);
+        
+                if (course == null) {
+                    res.status(400);
+                    return "Bad Request: Missing course :(";
+                }
+        
+                course.nextKeycode = key;
+                course.update();
+        
+                return "";
+            } catch (Exception e) {
+                e.printStackTrace();
                 res.status(400);
-                return "Bad Request: Missing course :(";
+                return "Your fault. Look what you've done.";
             }
-            
-            course.nextKeycode = key;
-            
-            if (course.canEnroll())
-                course.currentKeycode = key;
-            
-            course.update();
-            
-            return "";
         });
         
         before("/api/course/open", loggedInFilter);
         post("/api/course/open", (req,res) -> {
-            Map<String, String> form = InterpretBody.asForm(req.body());
-            String courseId = form.get("id");
-            String key = form.get("keycode");
-        
-            Course course = new Model.Finder<Long, Course>(Course.class)
-                    .byId(Long.valueOf(courseId));
-        
-            if (course == null) {
+            try {
+                JsonNode json = InterpretBody.jsonAsJson(req);
+                Long courseId = json.get("id").asLong();
+                String key = json.get("keycode").asText().toLowerCase();
+    
+                Course course = new Model.Finder<Long, Course>(Course.class)
+                        .byId(courseId);
+    
+                if (course == null) {
+                    res.status(400);
+                    return "Bad Request: Missing course :(";
+                }
+    
+                course.nextKeycode = key;
+                course.openAttendance();
+                course.update();
+    
+                return "";
+            } catch (Exception e) {
+                e.printStackTrace();
                 res.status(400);
-                return "Bad Request: Missing course :(";
+                return "Your fault. Look what you've done.";
             }
-            
-            course.nextKeycode = key;
-            course.openAttendance();
-            course.update();
-        
-            return "";
         });
         
         get("trace", (req, res)->{
@@ -150,7 +159,12 @@ public class AttendAPI {
         get("/api/courses", (req, res) -> {
         	Teacher teacher = (Teacher) Teacher.find.where().eq("email", req.session().attribute("email")).findUnique();
         	ObjectMapper mapper = new ObjectMapper();
-        	String jsonString = mapper.writeValueAsString(teacher.courses());
+            
+            Map<String, Course> courseMap = new HashMap<String, Course>();
+            for (Course course : teacher.courses())
+                courseMap.put(course.id +"", course);
+            
+        	String jsonString = mapper.writeValueAsString(courseMap);
         	return jsonString;
         });
     

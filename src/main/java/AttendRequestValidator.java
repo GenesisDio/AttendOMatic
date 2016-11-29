@@ -1,4 +1,7 @@
+import model.Course;
 import spark.Request;
+
+import java.util.Map;
 
 public class AttendRequestValidator {
     
@@ -15,7 +18,18 @@ public class AttendRequestValidator {
     
     
     public boolean isValid(Request req) {
-        // TODO: Add functionality here -merrillm
-        return req.ip().startsWith("130.86");
+        try {
+            Map<String, String> form = InterpretBody.asForm(req.body());
+            Long courseId = Long.parseLong(form.get("courseId"));
+            Course course = Course.find.byId(courseId);
+            
+            if (course == null || !course.canEnroll() || !course.currentKeycode.equals(form.get("keycode"))) {
+                return false;
+            }
+            
+            return req.ip().startsWith("130.86") || req.ip().equals("127.0.0.1");
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

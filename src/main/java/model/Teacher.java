@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "teachers")
 public class Teacher extends Model {
     
-    public static Model.Finder find = new Model.Finder<Long, Teacher>(Teacher.class);
+    public static Model.Finder<Long, Teacher> find = new Model.Finder<Long, Teacher>(Teacher.class);
     
     @Key
     @Id

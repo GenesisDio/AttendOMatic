@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name = "receipts")
 public class Receipt extends Model {
     
-    public static Model.Finder find = new Model.Finder<Long, Receipt>(Receipt.class);
+    public static Model.Finder<Long, Receipt> find = new Model.Finder<Long, Receipt>(Receipt.class);
     
     public Receipt(String studentId){
         this.studentId = studentId;
