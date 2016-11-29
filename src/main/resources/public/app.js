@@ -115,21 +115,27 @@ angular.module('attendApp', [
         controller: 'addCourseController'
       });
   };
+  $scope.openEditCourseDialog = function () {
+      ngDialog.open({
+        template: 'dialogs/editCourseTemplate.html',
+        className: 'ngdialog-theme-default',
+        controller: 'editCourseController',
+        scope: $scope
+      });
+  };
 })
 
 .controller('editCourseController', function($scope, $http) {
-
-  $scope.courses[$scope.selectedId].keycode = $scope.courses[$scope.selectedId].keycode ||
-    ("0000"+Math.floor(Math.random()*65536).toString(16)).slice(-4);
 
   $scope.submitCourseEdit = function() {
     $http({
       method: 'PUT',
       url: '/api/course',
-      data: $scope.courses[$scope.selectedId]
+      data: $scope.courseToEdit
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available
+      $scope.closeThisDialog();
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
@@ -143,6 +149,44 @@ angular.module('attendApp', [
       method: 'POST',
       url: '/api/course',
       data: $scope.courseToAdd
+    }).then(function successCallback(response) {
+      $scope.closeThisDialog();
+    }, function errorCallback (response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }
+});
+
+.controller('keyController', function($scope, $http) {
+  $scope.courseToPut = {
+  	id: $scope.$parent.selectedCourse
+  };
+  
+  $scope.keygen = function() {
+  	$scope.courseToPut.keycode = ("0000"+Math.floor(Math.random()*65536).toString(16).slice(-4);
+  }
+  if ($scope.$parent.courses[$scope.$parent.selectedCourse].keyDirty)
+  	$scope.keygen();
+  
+  $scope.submitSaveKeycode = function() {
+    $http({
+      method: 'POST',
+      url: '/api/course/keycode',
+      data: $scope.courseToPut
+    }).then(function successCallback(response) {
+      $scope.closeThisDialog();
+    }, function errorCallback (response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }
+  
+  $scope.submitOpenAttendance = function() {
+  	$http({
+      method: 'POST',
+      url: '/api/course/open',
+      data: $scope.courseToPut
     }).then(function successCallback(response) {
       $scope.closeThisDialog();
     }, function errorCallback (response) {
